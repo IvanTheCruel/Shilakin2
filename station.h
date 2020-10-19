@@ -12,7 +12,7 @@ public:
     std::string name;
     int quantity;
     int quantity_in_work;
-    double efficiency;
+    int efficiency;
 
     int get_id() const;
 

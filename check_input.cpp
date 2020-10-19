@@ -70,16 +70,44 @@ int ITC::check_input_int(string name_element){
     return input;
 }
 
+string ITC::check_input_str(string name_element){
+    std::string input;
+    bool checkSymbol = false, valid = false;
+    do {
+        cout << "Enter " << name_element << endl;
+        cin >> input;
+        for(auto test: input) if (test == '|') checkSymbol = true;
+        if(checkSymbol){
+            cout << "ERROR: symbol | is reserved! Please re-enter." << endl;
+            checkSymbol = false;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+        } else {
+            if (cin.good()){
+                valid = true;
+            }
+            else{
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                cout << "ERROR: wrong value! Please re-enter." << endl;
+            }
+        }
+
+    } while (!valid);
+
+    return input;
+}
+
 bool ITC::check_ans(std::string q){
     return "y"==ITC::check_input({"y","n"}, q);
 }
 
 int ITC::menu(){
-    vector<string> q = {"1-add pipe","2-add station","3-see all","4-edit pipe","5-edit station","6-save","7-load","0-exit"};
+    vector<string> q = {"1-add pipe","2-add station","3-see all","4-edit pipe","5-edit station","6-select pipes","7-select stations","8-save","9-load","0-exit"};
     cout << "options: ";
     for (auto t: q){
         if(t != q.back()) cout << t << ", ";
         else              cout << t << endl;
     }
-    return check_input_int("choose option");
+    return check_input_int("option");
 }

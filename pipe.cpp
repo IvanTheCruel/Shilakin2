@@ -5,6 +5,7 @@ using namespace std;
 int pipe::sId = 0;
 
 pipe::pipe():id(sId++){
+    name="basic_pipe_"+to_string(id);
     length = 100;
     diameter = 1400; //mm
 }
@@ -13,6 +14,7 @@ pipe::pipe():id(sId++){
 pipe::pipe(bool change):pipe::pipe(){
     if (!change) return;
     else {
+        name = check_input_str("name of pipe(no whitespaces)");
         length=check_input("length");
         diameter=check_input_int("diameter");
         under_repair = check_ans("under repair?");
@@ -24,8 +26,10 @@ pipe::pipe(std::ifstream& ifs):id(sId++){
     using namespace std;
     string str;
 
-
     getline(ifs, str, '|');//взяли id
+
+    getline(ifs, str, '|');
+    name=str;
 
     getline(ifs, str, '|');
     length=stod(str);
@@ -41,6 +45,7 @@ pipe::pipe(std::ifstream& ifs):id(sId++){
 
 
 void pipe::set(){
+    name = check_input_str("name of pipe(no whitespaces)");
     length=check_input("length");
     diameter=check_input_int("diameter");
 
@@ -69,6 +74,7 @@ pipe::~pipe(){
 
 std::ostream& operator<<(std::ostream& os, const pipe& mypipe){
     os << "\npipe id" << mypipe.get_id()
+       << " 'called "+ mypipe.name
        << "\n"<<(mypipe.under_repair ? "is":"is not")
        << " under repair\nlength:\t\t" << mypipe.length
        << "\ndiameter:\t"<< mypipe.diameter << "\n\n";
@@ -78,7 +84,8 @@ std::ostream& operator<<(std::ostream& os, const pipe& mypipe){
 
 std::ofstream& operator<<(std::ofstream& ofs, const pipe& mypipe){
     string ans = "P"
-                + to_string(mypipe.get_id())+"|"
+                +to_string(mypipe.get_id())+"|"
+                +mypipe.name+"|"
                 +to_string(mypipe.length)+"|"
                 +to_string(mypipe.diameter)+"|"
                 +(mypipe.under_repair? '1':'0')+"|\n";

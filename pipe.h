@@ -11,6 +11,7 @@ private:
     int id;
 
 public:
+    std::string name;
     double length;
     int diameter;
     bool under_repair = false;

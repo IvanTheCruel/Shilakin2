@@ -7,27 +7,26 @@ int station::sId = 0;
 
 station::station():id(sId++){
     name="basic_station_"+to_string(id);
-    efficiency =  78.22;
-    quantity = 20;
-    quantity_in_work = 15;
+    quantity = 200;
+    quantity_in_work = 193;
+    efficiency = double(quantity_in_work)/quantity*100;
     return;
 }
 
 station::station(bool change):station::station(){
     if (!change) return;
     else {
-        cout << "name station(no whitespaces)\n";
-        cin >> name;
+        name = check_input_str("name of station(no whitespaces)");
 
-        efficiency = check_input("efficiency");
-        quantity = check_input("quantity of departments");
-        quantity_in_work = check_input("quantity of departments in work");
+        quantity = check_input_int("quantity of departments");
+        quantity_in_work = check_input_int("quantity of departments in work");
 
         while(quantity < quantity_in_work) {
             cout<<"ERROR: to many departments in work, please reenter\n";
-            quantity = check_input("quantity of departments");
-            quantity_in_work = check_input("quantity of departments in work");
+            quantity = check_input_int("quantity of departments");
+            quantity_in_work = check_input_int("quantity of departments in work");
         }
+        efficiency = double(quantity_in_work)/quantity*100;
     }
     return;
 }
@@ -40,7 +39,7 @@ station::station(std::ifstream& ifs):id(sId++){
     getline(ifs, name, '|');
 
     getline(ifs, str, '|');
-    efficiency=stod(str);
+    efficiency=stoi(str);
 
     getline(ifs, str, '|');
     quantity=stoi(str);
@@ -67,19 +66,17 @@ void station::kill_sId(){
 
 
 void station::set(){
-    cout << "name station(no whitespaces)\n";
+    name = check_input_str("name of station(no whitespaces)");
 
-    cin>>name;
-
-    efficiency = check_input("efficiency");
     quantity = check_input_int("quantity of departments");
     quantity_in_work = check_input_int("quantity of departments in work");
+
     while(quantity < quantity_in_work) {
         cout<<"ERROR: to many departments in work, please reenter\n";
         quantity = check_input_int("quantity of departments");
         quantity_in_work = check_input_int("quantity of departments in work");
     }
-
+    efficiency = double(quantity_in_work)/quantity*100;
     return;
 }
 
@@ -118,7 +115,7 @@ std::ifstream& operator>>(std::ifstream& ifs, ITC::station& my_st){
     getline(ifs, my_st.name, '|');//дали имя
 
     getline(ifs, str, '|');//эффективность
-    my_st.efficiency=stod(str);
+    my_st.efficiency=stoi(str);
 
     getline(ifs, str, '|');//кол-во станций
     my_st.quantity=stoi(str);

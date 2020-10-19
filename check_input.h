@@ -15,6 +15,7 @@ namespace ITC {
     bool check_ans(std::string);
     double check_input(std::string);  //просим число double
     int check_input_int(std::string); //просим число int
+    std::string check_input_str(std::string);
     int menu();
 }
 
