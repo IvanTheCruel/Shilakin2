@@ -25,16 +25,34 @@ int main(){
         {
             int id = check_input_int("ID");
             if(id > pipe::get_max_id()-1) cout<<"no pipe with such ID\n\n";
-            else
-                pipes[id].set();
+            else {
+                bool found = false;
+                for (size_t i = 0; i < pipes.size(); i++){
+                    if (pipes[i].get_id()==id) {
+                        pipes[i].set();
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) cout<<"no pipe with such ID\n\n";
+            }
             break;
         }
         case 5:
         {
             int id = check_input_int("ID");
             if(id > station::get_max_id()-1) cout<<"no station with such ID\n\n";
-            else
-                stations[id].set();
+            else {
+                bool found = false;
+                for (size_t i = 0; i < stations.size(); i++){
+                    if (stations[i].get_id()==id) {
+                        stations[i].set();
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) cout<<"no stations with such ID\n\n";
+            }
             break;
         }
         case 6:
@@ -129,6 +147,40 @@ int main(){
                 }
             } else cout<<"ERROR:file isn't open!\n\n";
             fin.close();
+            break;
+        }
+        case 10:
+        {
+            int id = check_input_int("ID");
+            if(id > pipe::get_max_id()-1) cout<<"no pipe with such ID\n\n";
+            else {
+                bool found = false;
+                for (size_t i = 0; i < pipes.size(); i++){
+                    if (pipes[i].get_id()==id) {
+                        pipes.erase(pipes.begin() + i);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) cout<<"no pipe with such ID\n\n";
+            }
+            break;
+        }
+        case 11:
+        {
+            int id = check_input_int("ID");
+            if(id > station::get_max_id()-1) cout<<"no station with such ID\n\n";
+            else {
+                bool found = false;
+                for (size_t i = 0; i < stations.size(); i++){
+                    if (stations[i].get_id()==id) {
+                        stations.erase(stations.begin() + i);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) cout<<"no stations with such ID\n\n";
+            }
             break;
         }
         }

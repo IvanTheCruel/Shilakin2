@@ -103,7 +103,7 @@ bool ITC::check_ans(std::string q){
 }
 
 int ITC::menu(){
-    vector<string> q = {"1-add pipe","2-add station","3-see all","4-edit pipe","5-edit station","6-select pipes","7-select stations","8-save","9-load","0-exit"};
+    vector<string> q = {"1-add pipe","2-add station","3-see all","4-edit pipe","5-edit station","6-select pipes","7-select stations","\n\t8-save","9-load","10-delete pipe","11-delete station","0-exit"};
     cout << "options: ";
     for (auto t: q){
         if(t != q.back()) cout << t << ", ";
