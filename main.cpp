@@ -64,7 +64,7 @@ int main(){
                 string find_name;
                 bool find_ur = false;
                 bool found=false;
-                if (answer == 1 || answer == 3) find_name = check_input_str("name of pipe(no whitespaces)");
+                if (answer == 1 || answer == 3) find_name = check_input_str("name of pipe('ctrl+z' to end input)");
                 if (answer == 2 || answer == 3) find_ur = check_ans("under repair?");
 
                 for(auto p: pipes){

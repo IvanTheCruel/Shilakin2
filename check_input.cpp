@@ -11,7 +11,6 @@ string ITC::check_input(vector<string> a, string name_element){
     cout << ")\n";
     //перечисляем подходящие значения
 
-
     string temp;                      //ввод пользователя
     bool idiot = true;                //по умолчанию пользователь идиот
     cin >> temp;
@@ -19,6 +18,9 @@ string ITC::check_input(vector<string> a, string name_element){
     for (size_t i = 0; i < a.size() && idiot; i++){
         if (temp == a[i]) idiot = false; //если ответ пользователя совпадает с желаемым, он не идиот
     }
+
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     if(idiot){
         cout << "ERROR: wrong value!\n";
@@ -47,6 +49,9 @@ double ITC::check_input(string name_element){
         }
     } while (!valid);
 
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     return input;
 
 }
@@ -62,34 +67,30 @@ int ITC::check_input_int(string name_element){
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cin >> input;
     }
-
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     return (int)input;
 }
 
 string ITC::check_input_str(string name_element){
-    std::string input;
-    bool checkSymbol = false, valid = false;
-    do {
-        cout << "Enter " << name_element << endl;
-        cin >> input;
-        for(auto test: input) if (test == '|') checkSymbol = true;
-        if(checkSymbol){
-            cout << "ERROR: symbol | is reserved! Please re-enter." << endl;
-            checkSymbol = false;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
-        } else {
-            if (cin.good()){
-                valid = true;
-            }
-            else{
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(),'\n');
-                cout << "ERROR: wrong value! Please re-enter." << endl;
-            }
-        }
+    std::string input="";
+    std::string t;
+    cout << "Enter " << name_element << endl;
 
-    } while (!valid);
+    while(input.size() == 0){
+        while(cin >> t || cin.get()=='\n'){
+            input=input+" "+t;
+        }
+    }
+
+    for(size_t i = 0; i < input.size(); i++){
+        if(input[i]=='|' || input[i]=='\n' || i == 0){
+            input.erase(input.begin()+i);
+        }
+    }
+
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     return input;
 }
