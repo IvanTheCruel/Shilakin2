@@ -51,23 +51,19 @@ double ITC::check_input(string name_element){
 
 }
 
-int ITC::check_input_int(string name_element){
-    int input;
-    bool valid = false;
-    do {
-        cout << "Enter a number of " << name_element << endl;
-        cin >> input;
-        if (cin.good()){
-            valid = true;
-        }
-        else{
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
-            cout << "ERROR: wrong value! Please re-enter." << endl;
-        }
-    } while (!valid);
+int ITC::check_input_int(string name_element){    
+    double input;
+    cout << "Enter a number of " << name_element << endl;
+    cin >> input;
 
-    return input;
+    while (cin.fail() || (input-floor(input))){
+        cout << "ERROR: nubmer of elements has to be integer. Try again: " << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin >> input;
+    }
+
+    return (int)input;
 }
 
 string ITC::check_input_str(string name_element){
