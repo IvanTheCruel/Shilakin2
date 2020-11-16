@@ -5,7 +5,7 @@ using namespace std;
 int pipe::sId = 0;
 
 pipe::pipe():id(sId++){
-    name="basic_pipe_"+to_string(id);
+    name="p"+to_string(id);
     length = 100;
     diameter = 1400; //mm
 }
@@ -22,14 +22,14 @@ pipe::pipe(bool change):pipe::pipe(){
     }
 }
 
-pipe::pipe(std::ifstream& ifs):id(sId++){
+pipe::pipe(std::ifstream& ifs){
     using namespace std;
     string str;
 
     getline(ifs, str, '|');//взяли id
+    id=stoi(str);
 
-    getline(ifs, str, '|');
-    name=str;
+    getline(ifs, name, '|');
 
     getline(ifs, str, '|');
     length=stod(str);
@@ -40,6 +40,7 @@ pipe::pipe(std::ifstream& ifs):id(sId++){
     getline(ifs, str, '|');
     under_repair=str=="1";
 
+    sId=id+1; //меняется по последнему только в случае считывания из файла
     return;
 }
 

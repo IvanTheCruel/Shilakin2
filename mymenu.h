@@ -1,64 +1,41 @@
 #pragma once
 
-#include <iostream>
 #include <station.h>
 #include <pipe.h>
 
 
 namespace ITC {
-     int menu();
+int menu();
+bool fin(std::string, std::vector<ITC::pipe>&, std::vector<ITC::station>&);
+bool fout(std::string, std::vector<ITC::pipe>&, std::vector<ITC::station>&);
 
-     template<typename T>
+template<typename T, typename N>
+using filter = bool(*)(const N&, T);
 
-     using filter = bool(*)(const ITC::pipe&, T);
+template<typename N>
+bool checkByName(const N &p, std::string name){
+    return p.name == name;
+}
 
+bool checkByStatus(const ITC::pipe &p, bool state);
 
-     bool checkByName(const ITC::pipe &p, std::string name){
-         return p.name == name;
-     }
+bool checkByEffcy(const ITC::station &s, int effcy);
 
-     bool checkByStatus(const ITC::pipe &p, bool state){
-         return p.under_repair == state;
-     }
+template<typename N>
+bool checkByID(const N &p, int id){
+    return p.get_id() == id;
+}
 
-     bool checkByID(const ITC::pipe &p, int id){
-         return p.get_id() == id;
-     }
-
-     template<typename T>
-     std::vector<size_t> FindPipeByFilter(std::vector<ITC::pipe>& p, filter<T> f, T param){
-         std::vector<size_t> ans;
-         size_t i = 0;
-         for(auto t: p){
-             if(f(t,param)) ans.push_back(i);
-             i++;
-         }
-         return ans;
-     }
-
-////     template<typename T>
-
-////     using filter = bool(*)(const ITC::station&, T);
-
-
-//     bool checkByName(const ITC::station &p, std::string name){
-//         return p.name == name;
-//     }
-
-//     bool checkByID(const ITC::station &p, int id){
-//         return p.get_id() == id;
-//     }
-
-//     template<typename T>
-//     std::vector<size_t> FindPipeByFilter(std::vector<ITC::station>& p, filter<T> f, T param){
-//         std::vector<size_t> ans;
-//         size_t i = 0;
-//         for(auto t: p){
-//             if(f(t,param)) ans.push_back(i);
-//             i++;
-//         }
-//         return ans;
-//     }
+template<typename T, typename N>
+std::vector<size_t> FindByFilter(std::vector<N>& ps, filter<T,N> f, T param){
+    std::vector<size_t> ans;
+    size_t i = 0;
+    for(auto t: ps){
+        if(f(t,param)) ans.push_back(i);
+        i++;
+    }
+    return ans;
+}
 }
 
 

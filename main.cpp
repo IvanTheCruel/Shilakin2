@@ -22,7 +22,7 @@ int main(){
         case 4:
         {
             bool found = false;
-            for(auto p: FindPipeByFilter(pipes,checkByID,check_input_int("ID"))){
+            for(auto p: FindByFilter(pipes,checkByID,check_input_int("ID"))){ //id is unique
                 found = true;
                 cout << pipes[p];
                 pipes[p].set();
@@ -32,39 +32,33 @@ int main(){
         }
         case 5:
         {
-            int id = check_input_int("ID");
-            if(id > station::get_max_id()-1) cout<<"no station with such ID\n\n";
-            else {
-                bool found = false;
-                for (size_t i = 0; i < stations.size(); i++){
-                    if (stations[i].get_id()==id) {
-                        stations[i].set();
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) cout<<"no stations with such ID\n\n";
+            bool found = false;
+            for(auto s: FindByFilter(stations,checkByID,check_input_int("ID"))){ //id is unique
+                found = true;
+                cout << stations[s];
+                stations[s].set();
             }
+            if (!found) cout<<"no pipe with such ID\n\n";
             break;
         }
         case 6:
         {
             cout << "options: 1-select by name, 2-select by state,3-both,0-cancel\n";
-
             switch (check_input_int("option")) {
             case 0:
                 break;
             case 1:
-                for(auto p: FindPipeByFilter(pipes,checkByName,check_input_str("name of station('ctrl+z' to end input)")))
+                for(auto p: FindByFilter(pipes,checkByName,check_input_str("name of station('ctrl+z' to end input)")))
                     cout<<p;
                 break;
             case 2:
-                for(auto p: FindPipeByFilter(pipes,checkByStatus,check_ans("under repair?")))
+                for(auto p: FindByFilter(pipes,checkByStatus,check_ans("under repair?")))
                     cout<<p;
                 break;
             case 3:
-                for(auto p: FindPipeByFilter(pipes,checkByStatus,check_ans("under repair?")))
-                    cout<<p;
+                for(auto i: FindByFilter(pipes,checkByName,check_input_str("name of station('ctrl+z' to end input)")))
+                    for(auto j: FindByFilter(pipes,checkByStatus,check_ans("under repair?")))
+                        if (i==j) cout<<j;
                 break;
             }
             break;
@@ -72,102 +66,39 @@ int main(){
         case 7:
         {
             cout << "options: 1-select by name, 2-select by efficiency,3-both,0-cancel\n";
-
-            int answer = check_input_int("option");
-            if (answer!=0) {
-                string find_name;
-                int find_eff=0;
-                bool found=false;
-                if (answer == 1 || answer == 3) find_name = check_input_str("name of station('ctrl+z' to end input)");
-                if (answer == 2 || answer == 3) find_eff = check_input_int("station efficiency");
-
-                for(auto s: stations){
-                    if ((s.efficiency==find_eff || answer == 1) && (s.name==find_name || answer == 2) && answer != 0) {
-                        cout << s;
-                        found = true;
-                    }
-                }
-                if (found){
-                    if(check_ans("Want to edit them?"))
-                        for(auto s: stations){
-                            if ((s.efficiency==find_eff || answer == 1) && (s.name==find_name || answer == 2) && answer != 0) s.set();
-                        }
-                } else {
-                    cout << "No stations with such parameters\n\n";
-                }
+            switch (check_input_int("option")) {
+            case 0:
+                break;
+            case 1:
+                for(auto p: FindByFilter(stations,checkByName,check_input_str("name of station('ctrl+z' to end input)")))
+                    cout<<p;
+                break;
+            case 2:
+                for(auto p: FindByFilter(stations,checkByEffcy,check_input_int("efficiency")))
+                    cout<<p;
+                break;
+            case 3:
+                for(auto i: FindByFilter(stations,checkByName,check_input_str("name of station('ctrl+z' to end input)")))
+                    for(auto j: FindByFilter(stations,checkByEffcy,check_input_int("efficiency")))
+                        if (i==j) cout<<j;
+                break;
             }
-
             break;
         }
         case 8:
-        {
-            ofstream fout;
-            fout.open("base.txt");
-            if (fout.is_open()){
-                for (auto s: stations) fout << s;
-                for (auto p: pipes)    fout << p;
-
-            } else cout<<"ERROR:file isn't open!\n\n";
-            fout.close();
+            fout("base.txt", pipes, stations);
             break;
-        }
         case 9:
-        {
-            ifstream fin;
-            fin.open("base.txt");
-            if (fin.is_open()){
-                char t;
-                pipes.clear();
-                stations.clear();
-                pipe::kill_sId();
-                station::kill_sId();
-                fin >> t;
-                while(t != 'e'){
-                    if (t=='S') {
-                        stations.emplace_back(fin);
-                    } else if (t=='P') {
-                        pipes.emplace_back(fin);
-                    }
-                    fin >> t;
-                }
-            } else cout<<"ERROR:file isn't open!\n\n";
-            fin.close();
+            fin("base.txt", pipes, stations);
             break;
-        }
         case 10:
-        {
-            int id = check_input_int("ID");
-            if(id > pipe::get_max_id()-1) cout<<"no pipe with such ID\n\n";
-            else {
-                bool found = false;
-                for (size_t i = 0; i < pipes.size(); i++){
-                    if (pipes[i].get_id()==id) {
-                        pipes.erase(pipes.begin() + i);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) cout<<"no pipe with such ID\n\n";
-            }
+            for(auto p: FindByFilter(pipes,checkByID,check_input_int("ID"))) //id is unique
+                pipes.erase(pipes.begin()+p);
             break;
-        }
         case 11:
-        {
-            int id = check_input_int("ID");
-            if(id > station::get_max_id()-1) cout<<"no station with such ID\n\n";
-            else {
-                bool found = false;
-                for (size_t i = 0; i < stations.size(); i++){
-                    if (stations[i].get_id()==id) {
-                        stations.erase(stations.begin() + i);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) cout<<"no stations with such ID\n\n";
-            }
+            for(auto s: FindByFilter(stations,checkByID,check_input_int("ID"))) //id is unique
+                stations.erase(stations.begin()+s);
             break;
-        }
         }
     }
 }

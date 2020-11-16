@@ -6,7 +6,7 @@ int station::sId = 0;
 
 
 station::station():id(sId++){
-    name="basic_station_"+to_string(id);
+    name="s"+to_string(id);
     quantity = 200;
     quantity_in_work = 193;
     efficiency = double(quantity_in_work)/quantity*100;
@@ -31,10 +31,11 @@ station::station(bool change):station::station(){
     return;
 }
 
-station::station(std::ifstream& ifs):id(sId++){
+station::station(std::ifstream& ifs){
     string str;
 
     getline(ifs, str, '|');//взяли id
+    id=stoi(str);
 
     getline(ifs, name, '|');
 
@@ -46,6 +47,8 @@ station::station(std::ifstream& ifs):id(sId++){
 
     getline(ifs, str, '|');
     quantity_in_work=stoi(str);
+
+    sId=id+1; //меняется по последнему только в случае считывания из файла
 
     return;
 }
