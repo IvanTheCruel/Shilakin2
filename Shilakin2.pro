@@ -7,9 +7,11 @@ SOURCES += \
         main.cpp \
     pipe.cpp \
     station.cpp \
-    check_input.cpp
+    check_input.cpp \
+    mymenu.cpp
 
 HEADERS += \
     pipe.h \
     station.h \
-    check_input.h
+    check_input.h \
+    mymenu.h
