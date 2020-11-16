@@ -2,7 +2,6 @@
 using namespace std;
 
 string ITC::check_input(vector<string> a, string name_element){
-
     cout << name_element << "(";
     for (size_t i = 0; i < a.size(); i++) {
         cout << a[i];
@@ -41,9 +40,7 @@ double ITC::check_input(string name_element){
             valid = true;
         }
         else{
-
             cin.clear();
-
             cin.ignore(numeric_limits<streamsize>::max(),'\n');
             cout << "ERROR: wrong value! Please re-enter." << endl;
         }
@@ -61,7 +58,7 @@ int ITC::check_input_int(string name_element){
     cout << "Enter a number of " << name_element << endl;
     cin >> input;
 
-    while (cin.fail() || (input-floor(input))){
+    while (cin.fail() || (input-int(input))){
         cout << "ERROR: nubmer of elements has to be integer. Try again: " << endl;
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -100,11 +97,10 @@ bool ITC::check_ans(std::string q){
 }
 
 int ITC::menu(){
-    vector<string> q = {"1-add pipe","2-add station","3-see all","4-edit pipe","5-edit station","6-select pipes","7-select stations","\n\t8-save","9-load","10-delete pipe","11-delete station","0-exit"};
-    cout << "options: ";
+    vector<string> q = {"1-add pipe","2-add station","3-see all","4-edit pipe","5-edit station","6-select pipes","7-select stations","8-save","9-load","10-delete pipe","11-delete station","0-exit"};
+    cout << "options:\n";
     for (auto t: q){
-        if(t != q.back()) cout << t << ", ";
-        else              cout << t << endl;
+        cout << t << "\n";
     }
     return check_input_int("option");
 }

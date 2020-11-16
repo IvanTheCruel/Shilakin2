@@ -5,17 +5,17 @@ using namespace std;
 using namespace ITC;
 
 int main(){
-    vector<pipe> pipes;
+    vector<pipe>    pipes;
     vector<station> stations;
     while(1){
         switch(menu()){
         case 0:
             return 0;
         case 1:
-            pipes.emplace_back();
+            pipes.emplace_back(true);
             break;
         case 2:
-            stations.emplace_back();
+            stations.emplace_back(true);
             break;
         case 3:
             for (auto s: stations) cout << s;
@@ -58,29 +58,30 @@ int main(){
         case 6:
         {
             cout << "options: 1-select by name, 2-select by state,3-both,0-cancel\n";
-
             int answer = check_input_int("option");
+
             if (answer!=0){
                 string find_name;
                 bool find_ur = false;
-                bool found=false;
                 if (answer == 1 || answer == 3) find_name = check_input_str("name of pipe('ctrl+z' to end input)");
                 if (answer == 2 || answer == 3) find_ur = check_ans("under repair?");
+                vector<size_t> select_pipes;
 
-                for(auto p: pipes){
-                    if ((p.under_repair==find_ur || answer == 1) && (p.name==find_name || answer == 2) && answer != 0) {
-                        cout << p;
-                        found = true;
+                for(size_t i = 0; i < pipes.size(); i++){
+                    if ((pipes[i].under_repair==find_ur || answer == 1) && (pipes[i].name==find_name || answer == 2)) {
+                        cout << pipes[i];
+                        select_pipes.push_back(i);
                     }
                 }
-                if (found){
-                    if(check_ans("Want to edit them?"))
-                        for(auto p: pipes){
-                            if ((p.under_repair==find_ur || answer == 1) && (p.name==find_name || answer == 2) && answer != 0) p.set();
-                        }
-                } else {
-                    cout << "No pipes with such parameters\n\n";
-                }
+
+                if (select_pipes.empty()) cout << "no pipes with such parameters\n\n";
+//                else {
+//                    while(check_ans("want to edit?")){
+//                            for (auto i: select_pipes) cout << pipes[i];
+//                            answer = check_input_int("enter ID");
+
+//                    }
+//                }
             }
             break;
         }
@@ -93,7 +94,7 @@ int main(){
                 string find_name;
                 int find_eff=0;
                 bool found=false;
-                if (answer == 1 || answer == 3) find_name = check_input_str("name of station(no whitespaces)");
+                if (answer == 1 || answer == 3) find_name = check_input_str("name of station('ctrl+z' to end input)");
                 if (answer == 2 || answer == 3) find_eff = check_input_int("station efficiency");
 
                 for(auto s: stations){

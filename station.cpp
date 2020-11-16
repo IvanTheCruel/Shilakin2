@@ -16,7 +16,7 @@ station::station():id(sId++){
 station::station(bool change):station::station(){
     if (!change) return;
     else {
-        name = check_input_str("name of station(no whitespaces)");
+        name = check_input_str("name of station('ctrl+z' to end input)");
 
         quantity = check_input_int("quantity of departments");
         quantity_in_work = check_input_int("quantity of departments in work");
@@ -66,7 +66,7 @@ void station::kill_sId(){
 
 
 void station::set(){
-    name = check_input_str("name of station(no whitespaces)");
+    name = check_input_str("name of station('ctrl+z' to end input)");
 
     quantity = check_input_int("quantity of departments");
     quantity_in_work = check_input_int("quantity of departments in work");
