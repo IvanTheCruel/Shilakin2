@@ -8,12 +8,19 @@ namespace ITC {
 int menu();
 bool fin(std::string, std::vector<ITC::pipe>&, std::vector<ITC::station>&);
 bool fout(std::string, std::vector<ITC::pipe>&, std::vector<ITC::station>&);
+bool selectPipes(std::vector<pipe>&);
+bool selectStations(std::vector<station>&);
+std::vector<size_t> filterSelectPipes(std::vector<pipe>&);
+std::vector<size_t> filterSelectStations(std::vector<station>&);
 
-template<typename T, typename N>
-using filter = bool(*)(const N&, T);
 
-template<typename N>
-bool checkByName(const N &p, std::string name){
+//фильтр для поиска
+template<typename T, typename Class>
+using filter = bool(*)(const Class&, T);
+
+//варинаты фильтра
+template<typename Class>
+bool checkByName(const Class &p, std::string name){
     return p.name == name;
 }
 
@@ -21,13 +28,14 @@ bool checkByStatus(const ITC::pipe &p, bool state);
 
 bool checkByEffcy(const ITC::station &s, int effcy);
 
-template<typename N>
-bool checkByID(const N &p, int id){
+template<typename Class>
+bool checkByID(const Class &p, int id){
     return p.get_id() == id;
 }
 
-template<typename T, typename N>
-std::vector<size_t> FindByFilter(std::vector<N>& ps, filter<T,N> f, T param){
+//сам поиск
+template<typename T, typename Class>
+std::vector<size_t> FindByFilter(std::vector<Class>& ps, filter<T,Class> f, T param){
     std::vector<size_t> ans;
     size_t i = 0;
     for(auto t: ps){
@@ -36,6 +44,15 @@ std::vector<size_t> FindByFilter(std::vector<N>& ps, filter<T,N> f, T param){
     }
     return ans;
 }
+
+template<typename Class>
+bool edit(std::vector<Class>& ps, int id){
+    bool find = false;
+    for(auto p: FindByFilter(ps,checkByID,id)){
+        ps[p].set();
+        find = true;
+    }
+    return find;
 }
 
-
+}
