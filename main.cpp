@@ -16,7 +16,7 @@ int main(){
             mstations.insert({station::get_max_id(),station()});
             break;
         case 3: //see all
-            for (auto [k,v]: mpipes) cout << v;
+            for (auto [k,v]: mpipes)    cout << v;
             for (auto [k,v]: mstations) cout << v;
             break;
         case 4: //edit pipe
@@ -40,10 +40,10 @@ int main(){
             break;
         }
         case 8: //save
-            fout("base.txt", mpipes, mstations);
+            fout(check_input_str("name of file")+".txt", mpipes, mstations);
             break;
         case 9: //load
-            fin("base.txt", mpipes, mstations);
+            fin(check_input_str("name of file")+".txt", mpipes, mstations);
             break;
         case 10: //delete pipe
         {

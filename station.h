@@ -18,7 +18,7 @@ public:
 
     static int get_max_id();
     static void kill_sId();
-    void set();
+    void change();
 
 
     station();

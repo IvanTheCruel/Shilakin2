@@ -66,7 +66,7 @@ void station::kill_sId(){
 }
 
 
-void station::set(){
+void station::change(){
     name = check_input_str("name of station('ctrl+z' to end input)");
 
     quantity = check_input_int("quantity of departments");

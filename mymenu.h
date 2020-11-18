@@ -38,7 +38,7 @@ template<typename T, typename Class>
 std::vector<size_t> FindByFilter(std::map<size_t,Class>& ps, filter<T,Class> f, T param){
     std::vector<size_t> ans;
     for(auto [k,v]: ps){
-        if(f(v,param)) ans.push_back(k);
+        if(f(v,param)) ans.emplace_back(k);
     }
     return ans;
 }
@@ -46,7 +46,7 @@ std::vector<size_t> FindByFilter(std::map<size_t,Class>& ps, filter<T,Class> f, 
 template<typename Class>
 bool edit(std::map<size_t,Class>& ps, int id){         
     if (ps.find(id) != ps.end()) {
-        ps[id].set();
+        ps[id].change();
         return false;
     } else {
         std::cout << "ID not found\n";
