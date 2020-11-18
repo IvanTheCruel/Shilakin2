@@ -28,31 +28,30 @@ bool checkByStatus(const ITC::pipe &p, bool state);
 
 bool checkByEffcy(const ITC::station &s, int effcy);
 
-template<typename Class>
-bool checkByID(const Class &p, int id){
-    return p.get_id() == id;
-}
+//template<typename Class>
+//bool checkByID(const Class &p, int id){
+//    return p.get_id() == id;
+//}
 
 //сам поиск
 template<typename T, typename Class>
 std::vector<size_t> FindByFilter(std::map<size_t,Class>& ps, filter<T,Class> f, T param){
     std::vector<size_t> ans;
-    size_t i = 0;
     for(auto [k,v]: ps){
-        if(f(v,param)) ans.push_back(i);
-        i++;
+        if(f(v,param)) ans.push_back(k);
     }
     return ans;
 }
 
 template<typename Class>
-bool edit(std::map<size_t,Class>& ps, int id){
-    bool find = false;
-    for(auto p: FindByFilter(ps,checkByID,id)){
-        ps[p].set();
-        find = true;
+bool edit(std::map<size_t,Class>& ps, int id){         
+    if (ps.find(id) != ps.end()) {
+        ps[id].set();
+        return false;
+    } else {
+        std::cout << "ID not found\n";
+        return true;
     }
-    return find;
 }
 
 }

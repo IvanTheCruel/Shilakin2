@@ -116,16 +116,16 @@ bool ITC::selectPipes(std::map<size_t, pipe> &pipes){
         return false;
     }
     else
-    do{
-    for (auto p: find) cout << pipes[p];
-    if (check_ans("edit all?")){
-        bool under_repair = check_ans("under repair?");
-        for (auto p: find){
-            pipes[p].under_repair=under_repair;
+        do{
+        for (auto p: find) cout << pipes[p];
+        if (check_ans("edit all?")){
+            bool under_repair = check_ans("under repair?");
+            for (auto p: find){
+                pipes[p].under_repair=under_repair;
+            }
         }
-    }
-    else if (check_ans("edit one?"))
-    if(!edit(pipes,check_input_int("ID"))) cout << "can't edit pipe\n";
+        else if (check_ans("edit one?"))
+            if(!edit(pipes,check_input_int("ID"))) cout << "can't edit pipe\n";
     } while(check_ans("continue to edit?"));
     return true;
 }
