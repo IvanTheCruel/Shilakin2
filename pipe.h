@@ -2,8 +2,6 @@
 
 #include <check_input.h>
 
-
-
 class ITC::pipe
 {
 private:

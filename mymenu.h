@@ -6,12 +6,12 @@
 
 namespace ITC {
 int menu();
-bool fin(std::string, std::vector<ITC::pipe>&, std::vector<ITC::station>&);
-bool fout(std::string, std::vector<ITC::pipe>&, std::vector<ITC::station>&);
-bool selectPipes(std::vector<pipe>&);
-bool selectStations(std::vector<station>&);
-std::vector<size_t> filterSelectPipes(std::vector<pipe>&);
-std::vector<size_t> filterSelectStations(std::vector<station>&);
+bool fin(std::string, std::map<size_t,pipe>&, std::map<size_t,station>&);
+bool fout(std::string, std::map<size_t, pipe>&, std::map<size_t, station>&);
+bool selectPipes(std::map<size_t,pipe>&);
+bool selectStations(std::map<size_t,station>&);
+std::vector<size_t> filterSelectPipes(std::map<size_t,pipe>&);
+std::vector<size_t> filterSelectStations(std::map<size_t,station>&);
 
 
 //фильтр для поиска
@@ -35,18 +35,18 @@ bool checkByID(const Class &p, int id){
 
 //сам поиск
 template<typename T, typename Class>
-std::vector<size_t> FindByFilter(std::vector<Class>& ps, filter<T,Class> f, T param){
+std::vector<size_t> FindByFilter(std::map<size_t,Class>& ps, filter<T,Class> f, T param){
     std::vector<size_t> ans;
     size_t i = 0;
-    for(auto t: ps){
-        if(f(t,param)) ans.push_back(i);
+    for(auto [k,v]: ps){
+        if(f(v,param)) ans.push_back(i);
         i++;
     }
     return ans;
 }
 
 template<typename Class>
-bool edit(std::vector<Class>& ps, int id){
+bool edit(std::map<size_t,Class>& ps, int id){
     bool find = false;
     for(auto p: FindByFilter(ps,checkByID,id)){
         ps[p].set();

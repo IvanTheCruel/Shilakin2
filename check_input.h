@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <limits>
+#include <map>
 
 namespace ITC {
     class pipe;
