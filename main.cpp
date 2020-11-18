@@ -3,55 +3,65 @@ using namespace std;
 using namespace ITC;
 
 int main(){
-    vector<pipe>    pipes;
-    vector<station> stations;
+    map<size_t,pipe>    mpipes;
+    map<size_t,station> mstations;
     while(1){
         switch(menu()){
         case 0:
             return 0;
         case 1:
-            pipes.emplace_back(true);
+            mpipes.insert({pipe::get_max_id(),pipe()});
             break;
         case 2:
-            stations.emplace_back(true);
+            mstations.insert({station::get_max_id(),station()});
             break;
         case 3: //see all
-            for (auto s: stations) cout << s;
-            for (auto p: pipes)    cout << p;
+            for (auto [k,v]: mpipes)    cout << v;
+            for (auto [k,v]: mstations) cout << v;
             break;
         case 4: //edit pipe
         {
-            if(!edit(pipes,check_input_int("ID"))) cout << "can't edit pipe\n";
+            if(!edit(mpipes,check_input_int("ID"))) cout << "can't edit pipe\n";
             break;
         }
         case 5: //edit station
         {
-            if(!edit(stations,check_input_int("ID"))) cout << "can't edit station\n";
+            if(!edit(mstations,check_input_int("ID"))) cout << "can't edit station\n";
             break;
         }
         case 6: //select pipes
         {
-            if(!selectPipes(pipes)) cout<<"can't select any pipe\n";
+            if(!selectPipes(mpipes)) cout<<"can't select any pipe\n";
             break;
         }
         case 7: //select stations
         {
-            if(!selectStations(stations)) cout<<"can't select any station\n";
+            if(!selectStations(mstations)) cout<<"can't select any station\n";
             break;
         }
         case 8: //save
-            fout("base.txt", pipes, stations);
+            fout(check_input_str("name of file")+".txt", mpipes, mstations);
             break;
         case 9: //load
-            fin("base.txt", pipes, stations);
+            fin(check_input_str("name of file")+".txt", mpipes, mstations);
             break;
         case 10: //delete pipe
-            for(auto p: FindByFilter(pipes,checkByID,check_input_int("ID"))) //id is unique
-                pipes.erase(pipes.begin()+p);
+        {
+            size_t id = check_input_int("ID");
+            if (mpipes.find(id) != mpipes.end()) {
+                mpipes.erase(id);
+            } else {
+                cout << "ID not found\n";
+            }
             break;
+        }
         case 11: //delete station
-            for(auto s: FindByFilter(stations,checkByID,check_input_int("ID"))) //id is unique
-                stations.erase(stations.begin()+s);
+            size_t id = check_input_int("ID");
+            if (mstations.find(id) != mstations.end()) {
+                mstations.erase(id);
+            } else {
+                cout << "ID not found\n";
+            }
             break;
         }
     }

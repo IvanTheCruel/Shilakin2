@@ -18,12 +18,12 @@ public:
 
     static int get_max_id();
     static void kill_sId();
-    void set();
+    void change();
 
 
     station();
     station(bool);
-    station(std::ifstream&);
+    station(std::ifstream&, int);
     ~station();
 };
 

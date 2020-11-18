@@ -31,12 +31,10 @@ station::station(bool change):station::station(){
     return;
 }
 
-station::station(std::ifstream& ifs){
+station::station(std::ifstream& ifs, int tid):id(tid){
     string str;
 
-    getline(ifs, str, '|');//взяли id
-    id=stoi(str);
-
+    getline(ifs, str, '|');
     getline(ifs, name, '|');
 
     getline(ifs, str, '|');
@@ -68,7 +66,7 @@ void station::kill_sId(){
 }
 
 
-void station::set(){
+void station::change(){
     name = check_input_str("name of station('ctrl+z' to end input)");
 
     quantity = check_input_int("quantity of departments");

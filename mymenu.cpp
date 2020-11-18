@@ -13,18 +13,21 @@ int ITC::menu(){
     return check_input_int("option:");
 }
 
-bool ITC::fin(std::string address, vector<ITC::pipe>&pipes, vector<ITC::station>&stations){
+bool ITC::fin(std::string address, std::map<size_t, pipe> &pipes, std::map<size_t, station> &stations){
     ifstream fin(address);
     if (fin.is_open()){
         char t;
+        int tempid;
         pipes.clear(); stations.clear();
         ITC::pipe::kill_sId(); ITC::station::kill_sId();
         fin >> t;
         while(t != 'e'){
             if (t=='S') {
-                stations.emplace_back(fin);
+                fin >> tempid;
+                stations.insert({tempid,station(fin, tempid)});
             } else if (t=='P') {
-                pipes.emplace_back(fin);
+                fin >> tempid;
+                pipes.insert({tempid,pipe(fin, tempid)});
             }
             fin >> t;
         }
@@ -37,12 +40,12 @@ bool ITC::fin(std::string address, vector<ITC::pipe>&pipes, vector<ITC::station>
     return true;
 }
 
-bool ITC::fout(std::string address, vector<ITC::pipe>&pipes, vector<ITC::station>&stations){
+bool ITC::fout(std::string address, std::map<size_t, pipe> &pipes, std::map<size_t, station> &stations){
     ofstream fout;
     fout.open(address);
     if (fout.is_open()){
-        for (auto s: stations) fout << s;
-        for (auto p: pipes)    fout << p;
+        for (auto [k,v]: stations) fout << v;
+        for (auto [k,v]: pipes)    fout << v;
 
     } else {
         cout<<"ERROR:file isn't open!\n\n";
@@ -64,7 +67,8 @@ bool ITC::checkByEffcy(const ITC::station &s, int effcy){
 
 
 
-std::vector<size_t> ITC::filterSelectPipes(std::vector<ITC::pipe> &ps){
+std::vector<size_t> ITC::filterSelectPipes(std::map<size_t,pipe> &ps){
+    cout << "options: 1-select by name, 2-select by state,3-both\n";
     std::vector<size_t> find;
     switch (check_input_int("option")){
     case 1:
@@ -72,9 +76,10 @@ std::vector<size_t> ITC::filterSelectPipes(std::vector<ITC::pipe> &ps){
     case 2:
         return FindByFilter(ps,checkByStatus,check_ans("under repair?"));
     case 3:
-        for (auto temp_by_name: FindByFilter(ps,checkByName,check_input_str("name of station('ctrl+z' to end input)"))){
+        for     (auto temp_by_name:  FindByFilter(ps,checkByName,check_input_str("name of station('ctrl+z' to end input)"))){
             for (auto temp_by_state: FindByFilter(ps,checkByStatus,check_ans("under repair?"))){
-                if (temp_by_name==temp_by_state) find.push_back(temp_by_name);
+                if (temp_by_name==temp_by_state)
+                    find.emplace_back(temp_by_name);
             }
         }
         break;
@@ -84,7 +89,8 @@ std::vector<size_t> ITC::filterSelectPipes(std::vector<ITC::pipe> &ps){
     return find;
 }
 
-std::vector<size_t> ITC::filterSelectStations(std::vector<station>& ps){
+std::vector<size_t> ITC::filterSelectStations(std::map<size_t,station>& ps){
+    cout << "options: 1-select by name, 2-select by efficiency,3-both\n";
     std::vector<size_t> find;
     switch (check_input_int("option")){
     case 1:
@@ -92,9 +98,10 @@ std::vector<size_t> ITC::filterSelectStations(std::vector<station>& ps){
     case 2:
         return FindByFilter(ps,checkByEffcy,check_input_int("efficiency"));
     case 3:
-        for (auto temp_by_name: FindByFilter(ps,checkByName,check_input_str("name of station('ctrl+z' to end input)"))){
+        for     (auto temp_by_name:  FindByFilter(ps,checkByName,check_input_str("name of station('ctrl+z' to end input)"))){
             for (auto temp_by_state: FindByFilter(ps,checkByEffcy,check_input_int("efficiency"))){
-                if (temp_by_name==temp_by_state) find.push_back(temp_by_name);
+                if (temp_by_name==temp_by_state)
+                    find.emplace_back(temp_by_name);
             }
         }
         break;
@@ -105,33 +112,33 @@ std::vector<size_t> ITC::filterSelectStations(std::vector<station>& ps){
 }
 
 
-bool ITC::selectPipes(std::vector<pipe>& pipes){
-    cout << "options: 1-select by name, 2-select by state,3-both\n";
+bool ITC::selectPipes(std::map<size_t, pipe> &pipes){
+
     vector<size_t> find = filterSelectPipes(pipes);
     if (find.empty()) {
-        cout << "Select is empty\n";
+        cout << "Not found\n";
         return false;
     }
     else
-    do{
-    for (auto p: find) cout << pipes[p];
-    if (check_ans("edit all?")){
-        bool under_repair = check_ans("under repair?");
-        for (auto p: find){
-            pipes[p].under_repair=under_repair;
+        do{
+        for (auto p: find) cout << pipes[p];
+        if (check_ans("edit all?")){
+            bool under_repair = check_ans("under repair?");
+            for (auto p: find){
+                pipes[p].under_repair=under_repair;
+            }
         }
-    }
-    else if (check_ans("edit one?"))
-    if(!edit(pipes,check_input_int("ID"))) cout << "can't edit pipe\n";
+        else if (check_ans("edit one?"))
+            if(!edit(pipes,check_input_int("ID"))) cout << "can't edit pipe\n";
     } while(check_ans("continue to edit?"));
     return true;
 }
 
-bool ITC::selectStations(std::vector<ITC::station>& stations){
-    cout << "options: 1-select by name, 2-select by efficiency,3-both\n";
+bool ITC::selectStations(std::map<size_t, station> &stations){
+
     vector<size_t> find = filterSelectStations(stations);
     if (find.empty()) {
-        cout << "Select is empty\n";
+        cout << "Not found\n";
         return false;
     }
     else
