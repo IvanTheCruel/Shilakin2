@@ -23,7 +23,7 @@ public:
 
     station();
     station(bool);
-    station(std::ifstream&);
+    station(std::ifstream&, int);
     ~station();
 };
 

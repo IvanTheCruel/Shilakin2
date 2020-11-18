@@ -31,12 +31,10 @@ station::station(bool change):station::station(){
     return;
 }
 
-station::station(std::ifstream& ifs){
+station::station(std::ifstream& ifs, int tid):id(tid){
     string str;
 
-    getline(ifs, str, '|');//взяли id
-    id=stoi(str);
-
+    getline(ifs, str, '|');
     getline(ifs, name, '|');
 
     getline(ifs, str, '|');

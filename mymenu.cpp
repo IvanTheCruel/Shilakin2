@@ -17,14 +17,17 @@ bool ITC::fin(std::string address, std::map<size_t, pipe> &pipes, std::map<size_
     ifstream fin(address);
     if (fin.is_open()){
         char t;
+        int tempid;
         pipes.clear(); stations.clear();
         ITC::pipe::kill_sId(); ITC::station::kill_sId();
         fin >> t;
         while(t != 'e'){
             if (t=='S') {
-                stations.insert({pipe::get_max_id(),station(fin)});
+                fin >> tempid;
+                stations.insert({tempid,station(fin, tempid)});
             } else if (t=='P') {
-                pipes.insert({pipe::get_max_id(),pipe(fin)});
+                fin >> tempid;
+                pipes.insert({tempid,pipe(fin, tempid)});
             }
             fin >> t;
         }

@@ -21,7 +21,7 @@ public:
 
     pipe();
     pipe(bool);
-    pipe(std::ifstream&);
+    pipe(std::ifstream&, int);
     ~pipe();
 };
 

@@ -22,13 +22,11 @@ pipe::pipe(bool change):pipe::pipe(){
     }
 }
 
-pipe::pipe(std::ifstream& ifs){
+pipe::pipe(std::ifstream& ifs, int tid):id(tid){
     using namespace std;
     string str;
 
-    getline(ifs, str, '|');//взяли id
-    id=stoi(str);
-
+    getline(ifs, str, '|');
     getline(ifs, name, '|');
 
     getline(ifs, str, '|');

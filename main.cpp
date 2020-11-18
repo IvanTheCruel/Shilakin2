@@ -46,12 +46,22 @@ int main(){
             fin("base.txt", mpipes, mstations);
             break;
         case 10: //delete pipe
-            for(auto p: FindByFilter(mpipes,checkByID,check_input_int("ID"))) //id is unique
-               mpipes.erase(p);
+        {
+            size_t id = check_input_int("ID");
+            if (mpipes.find(id) != mpipes.end()) {
+                mpipes.erase(id);
+            } else {
+                cout << "ID not found\n";
+            }
             break;
+        }
         case 11: //delete station
-            for(auto s: FindByFilter(mstations,checkByID,check_input_int("ID"))) //id is unique
-                mstations.erase(s);
+            size_t id = check_input_int("ID");
+            if (mstations.find(id) != mstations.end()) {
+                mstations.erase(id);
+            } else {
+                cout << "ID not found\n";
+            }
             break;
         }
     }
